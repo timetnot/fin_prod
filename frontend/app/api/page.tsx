@@ -58,7 +58,7 @@ export default function APIPage() {
             <div className="flex flex-col sm:flex-row gap-4">
               <input
                 type="text"
-                placeholder="sk_live_xxxxxxxxxxxxxxxxxxxxxxxx"
+                placeholder="your-api-key-here"
                 className="flex-1 px-4 py-3 border border-slate-300 dark:border-slate-600 rounded-lg bg-white dark:bg-slate-700 text-slate-900 dark:text-white"
                 readOnly
               />
