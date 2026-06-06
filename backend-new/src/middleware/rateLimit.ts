@@ -17,10 +17,6 @@ export const rateLimiter = rateLimit({
            req.path.startsWith('/static') || 
            req.path.startsWith('/_next');
   },
-  keyGenerator: (req: Request) => {
-    // Используем IP и User-Agent для более точного ограничения
-    return req.ip + ':' + req.get('User-Agent');
-  }
 });
 
 // Более строгий rate limiting для аутентификации
@@ -34,9 +30,6 @@ export const authRateLimiter = rateLimit({
   standardHeaders: true,
   legacyHeaders: false,
   skipSuccessfulRequests: false, // Считать успешные запросы тоже
-  keyGenerator: (req: Request) => {
-    return req.ip + ':auth:' + req.get('User-Agent');
-  }
 });
 
 // Rate limiting для создания/обновления данных
@@ -49,9 +42,6 @@ export const dataRateLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req: Request) => {
-    return req.ip + ':data:' + req.get('User-Agent');
-  }
 });
 
 // Rate limiting для генерации отчетов
@@ -64,9 +54,4 @@ export const reportRateLimiter = rateLimit({
   },
   standardHeaders: true,
   legacyHeaders: false,
-  keyGenerator: (req: Request) => {
-    // Для отчетов используем ID пользователя если он авторизован
-    const userId = (req as any).user?.id || 'anonymous';
-    return req.ip + ':report:' + userId;
-  }
 });

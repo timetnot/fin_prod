@@ -1,6 +1,6 @@
 import Cookies from 'js-cookie';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || '';
 
 export async function apiClient(endpoint: string, options?: RequestInit) {
   let token = null;
@@ -13,7 +13,7 @@ export async function apiClient(endpoint: string, options?: RequestInit) {
     token = Cookies.get('token');
   }
   
-  const response = await fetch(`${API_URL}${endpoint}`, {
+  const response = await fetch(`/api${endpoint}`, {
     headers: {
       'Content-Type': 'application/json',
       ...(token ? { 'Authorization': `Bearer ${token}` } : {}),

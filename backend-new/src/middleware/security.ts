@@ -44,11 +44,17 @@ export const corsOptions = {
   origin: function (origin: string | undefined, callback: (err: Error | null, allow: boolean) => void) {
     const allowedOrigins = [
       'http://localhost:3000',
+      'https://localhost:3000',
       'http://localhost:3001',
+      'https://localhost:3001',
       'http://127.0.0.1:3000',
+      'https://127.0.0.1:3000',
       'http://127.0.0.1:3001',
+      'https://127.0.0.1:3001',
       'http://192.168.1.152:3000',
+      'https://192.168.1.152:3000',
       'http://192.168.1.152:3001',
+      'https://192.168.1.152:3001',
       process.env.FRONTEND_URL,
       process.env.PRODUCTION_URL
     ].filter(Boolean);

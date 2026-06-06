@@ -98,24 +98,24 @@ export function BillingCalendar({ subscriptions, currentMonth = new Date(), onMo
   const nextMonth = () => onMonthChange?.(addMonths(currentMonth, 1));
 
   return (
-    <div className="bg-gradient-to-br from-white/95 to-white/80 backdrop-blur-2xl rounded-3xl border border-black/5 p-6 shadow-2xl shadow-black/10">
+    <div className="bg-white/5 backdrop-blur-2xl rounded-3xl border border-white/10 p-6 shadow-2xl shadow-black/50">
       <div className="flex items-center justify-between mb-6">
         <button
           onClick={previousMonth}
-          className="w-10 h-10 bg-black/5 hover:bg-black/10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-black/10"
+          className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-black/20 border border-white/10"
         >
-          <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <h3 className="text-2xl font-bold text-black tracking-tight">
+        <h3 className="text-2xl font-bold text-white tracking-tight">
           {format(currentMonth, 'LLLL yyyy', { locale: ru })}
         </h3>
         <button
           onClick={nextMonth}
-          className="w-10 h-10 bg-black/5 hover:bg-black/10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-black/10"
+          className="w-10 h-10 bg-white/5 hover:bg-white/10 rounded-xl flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-lg hover:shadow-black/20 border border-white/10"
         >
-          <svg className="w-5 h-5 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
           </svg>
         </button>
@@ -123,7 +123,7 @@ export function BillingCalendar({ subscriptions, currentMonth = new Date(), onMo
 
       <div className="grid grid-cols-7 gap-2 mb-3">
         {weekDays.map(day => (
-          <div key={day} className="text-center text-xs font-bold text-black/40 uppercase tracking-wider p-2">
+          <div key={day} className="text-center text-xs font-bold text-gray-500 uppercase tracking-wider p-2">
             {day}
           </div>
         ))}
@@ -139,13 +139,13 @@ export function BillingCalendar({ subscriptions, currentMonth = new Date(), onMo
             <div
               key={day.toISOString()}
               className={`
-                min-h-[90px] p-2 border-2 rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-black/5
-                ${isCurrentMonth ? 'bg-white/80 backdrop-blur-sm border-black/5 hover:border-black/10' : 'bg-black/5 border-black/5'}
-                ${isToday ? 'ring-2 ring-black shadow-xl shadow-black/10' : ''}
-                ${events.length > 0 ? 'border-black/10 bg-gradient-to-br from-black/5 to-black/0' : ''}
+                min-h-[90px] p-2 border rounded-2xl transition-all duration-300 hover:shadow-lg hover:shadow-black/30
+                ${isCurrentMonth ? 'bg-white/5 backdrop-blur-sm border-white/10 hover:border-white/20' : 'bg-white/2 border-white/5'}
+                ${isToday ? 'ring-2 ring-purple-500/50 shadow-xl shadow-purple-500/20' : ''}
+                ${events.length > 0 ? 'border-purple-500/30 bg-gradient-to-br from-purple-500/10 to-pink-500/5' : ''}
               `}
             >
-              <div className={`text-sm font-bold mb-1 ${isCurrentMonth ? 'text-black' : 'text-black/40'}`}>
+              <div className={`text-sm font-bold mb-1 ${isCurrentMonth ? 'text-white' : 'text-gray-500'}`}>
                 {format(day, 'd')}
               </div>
               
@@ -154,7 +154,7 @@ export function BillingCalendar({ subscriptions, currentMonth = new Date(), onMo
                   {events.slice(0, 2).map(event => (
                     <div
                       key={event.id}
-                      className="text-xs p-1.5 bg-gradient-to-br from-black to-black/80 text-white rounded-lg font-medium truncate shadow-md shadow-black/20"
+                      className="text-xs p-1.5 bg-gradient-to-br from-purple-500/20 to-pink-500/10 text-white rounded-lg font-medium truncate shadow-md shadow-purple-500/20 border border-purple-500/20"
                       title={event.name}
                     >
                       {event.name}
@@ -162,12 +162,12 @@ export function BillingCalendar({ subscriptions, currentMonth = new Date(), onMo
                   ))}
                   
                   {events.length > 2 && (
-                    <div className="text-xs text-black/60 font-medium px-1.5">
+                    <div className="text-xs text-gray-400 font-medium px-1.5">
                       +{events.length - 2} еще
                     </div>
                   )}
                   
-                  <div className="text-xs font-bold text-black mt-1">
+                  <div className="text-xs font-bold text-purple-300 mt-1">
                     {formatCurrency(totalAmount, 'RUB')}
                   </div>
                 </div>
@@ -177,14 +177,14 @@ export function BillingCalendar({ subscriptions, currentMonth = new Date(), onMo
         })}
       </div>
 
-      <div className="mt-6 pt-6 border-t-2 border-black/5">
+      <div className="mt-6 pt-6 border-t border-white/10">
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            <div className="w-4 h-4 bg-gradient-to-br from-black to-black/80 rounded-lg shadow-lg shadow-black/20"></div>
-            <span className="text-sm font-bold text-black uppercase tracking-wider">Дни списаний</span>
+            <div className="w-4 h-4 bg-gradient-to-br from-purple-500/30 to-pink-500/20 rounded-lg shadow-lg shadow-purple-500/20 border border-purple-500/30"></div>
+            <span className="text-sm font-bold text-gray-300 uppercase tracking-wider">Дни списаний</span>
           </div>
-          <div className="text-sm font-bold text-black">
-            Всего списаний в месяце: <span className="text-black/60">{subscriptions.filter(s => s.isActive).length}</span>
+          <div className="text-sm font-bold text-gray-300">
+            Всего списаний в месяце: <span className="text-gray-500">{subscriptions.filter(s => s.isActive).length}</span>
           </div>
         </div>
       </div>
