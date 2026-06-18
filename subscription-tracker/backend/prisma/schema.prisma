@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  name      String?
+  password  String?
+  provider  String?  @default("local")
+  providerId String? @map("provider_id")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  
+  subscriptions Subscription[]
+  categories Category[]
+  notifications Notification[]
+  auditLogs AuditLog[]
+
+  @@map("users")
+}
+
+model Category {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  name        String
+  icon        String?
+  color       String?
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  subscriptions Subscription[]
+
+  @@map("categories")
+}
+
+model Subscription {
+  id              String   @id @default(cuid())
+  userId          String   @map("user_id")
+  categoryId      String?  @map("category_id")
+  name            String
+  category        String
+  amount          Float
+  currency        String
+  billingCycle    String   @map("billing_cycle")
+  nextBillingDate DateTime @map("next_billing_date")
+  isActive        Boolean  @default(true) @map("is_active")
+  logoUrl         String?  @map("logo_url")
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+  
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  categoryRelation Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+
+  @@map("subscriptions")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String   @map("user_id")
+  type      String   // payment_due, payment_reminder, etc.
+  title     String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now()) @map("created_at")
+  
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?  @map("user_id")
+  action    String   // CREATE, UPDATE, DELETE, LOGIN, LOGOUT, etc.
+  resource  String   // SUBSCRIPTION, CATEGORY, USER, etc.
+  resourceId String?  @map("resource_id")
+  details   String?  // JSON string with additional details
+  ipAddress String?  @map("ip_address")
+  userAgent String?  @map("user_agent")
+  timestamp DateTime @default(now())
+  
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("audit_logs")
+  @@index([userId])
+  @@index([timestamp])
+  @@index([action])
+  @@index([resource])
+}
