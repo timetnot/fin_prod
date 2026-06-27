@@ -16,7 +16,6 @@ import { UploadsModule } from './uploads/uploads.module';
 import { CategoriesModule } from './categories/categories.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ImportModule } from './import/import.module';
-import { GmailModule } from './gmail/gmail.module';
 
 @Module({
   imports: [
@@ -25,8 +24,6 @@ import { GmailModule } from './gmail/gmail.module';
     }),
     
     CommonModule,
-    
-    GmailModule,
     
     ThrottlerModule.forRoot([
       {

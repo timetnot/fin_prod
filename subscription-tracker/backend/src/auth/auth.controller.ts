@@ -16,6 +16,8 @@ export class AuthController {
   @Public()
   @Post('register')
   async register(@Body() dto: RegisterDto) {
+    console.log('Register DTO:', dto);
+    console.log('Register body:', JSON.stringify(dto));
     return this.authService.register(dto);
   }
 
@@ -74,9 +76,9 @@ export class AuthController {
   async sendVerificationCode(@Body() body: { email: string }) {
     console.log('Received send-code request for email:', body.email);
     try {
-      await this.emailService.sendVerificationCode(body.email);
+      const code = await this.emailService.sendVerificationCode(body.email);
       console.log('Code sent successfully to:', body.email);
-      return { success: true, message: 'Код отправлен на email' };
+      return { success: true, message: 'Код отправлен на email', code }; // Return code for testing
     } catch (error) {
       console.error('Error sending code:', error);
       return { success: false, message: 'Ошибка отправки кода' };

@@ -1,13 +1,10 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import { GmailService } from '../gmail/gmail.service';
 
 @Injectable()
 export class EmailService implements OnModuleInit {
   private transporter: nodemailer.Transporter;
   private verificationCodes = new Map<string, { code: string; expiresAt: number }>();
-
-  constructor(private gmailService: GmailService) {}
 
   async onModuleInit() {
     const smtpHost = process.env.SMTP_HOST;
@@ -38,7 +35,7 @@ export class EmailService implements OnModuleInit {
     console.log('SMTP not configured. Will use Gmail API if available.');
   }
 
-  async sendVerificationCode(email: string): Promise<void> {
+  async sendVerificationCode(email: string): Promise<string> {
     // Генерируем 6-значный код
     const code = Math.floor(100000 + Math.random() * 900000).toString();
     
@@ -57,29 +54,10 @@ export class EmailService implements OnModuleInit {
     console.log(`Expires: ${new Date(Date.now() + 5 * 60 * 1000).toLocaleString()}`);
     console.log('='.repeat(50));
 
-    // Проверяем, настроен ли SMTP или Gmail API
+    // Проверяем, настроен ли SMTP
     if (!this.transporter) {
-      console.log('SMTP not configured. Trying Gmail API...');
-      try {
-        const htmlBody = `
-          <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
-            <h2 style="color: #333;">Ваш код подтверждения</h2>
-            <p style="color: #666; font-size: 16px;">Введите этот код для входа в SubGrid:</p>
-            <div style="background: #f5f5f5; padding: 20px; text-align: center; border-radius: 8px; margin: 20px 0;">
-              <span style="font-size: 32px; font-weight: bold; letter-spacing: 8px; color: #333;">${code}</span>
-            </div>
-            <p style="color: #999; font-size: 14px;">Код действителен в течение 5 минут.</p>
-            <p style="color: #999; font-size: 14px;">Если вы не запрашивали этот код, проигнорируйте это сообщение.</p>
-          </div>
-        `;
-        await this.gmailService.sendEmail(email, 'Код подтверждения SubGrid', htmlBody);
-        console.log('Verification code sent via Gmail API to:', email);
-        return;
-      } catch (error) {
-        console.error('Gmail API failed:', error);
-        console.log('Code logged to console only');
-        return;
-      }
+      console.log('SMTP not configured. Code logged to console only');
+      return code; // Возвращаем код для тестирования
     }
 
     // Отправляем email
@@ -112,6 +90,8 @@ export class EmailService implements OnModuleInit {
       console.error('Error sending email:', error);
       console.log('Code is available in console logs above');
     }
+    
+    return code;
   }
 
   verifyCode(email: string, code: string): boolean {
